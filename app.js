@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -11,12 +12,14 @@ var tasksRuter = require('./routes/tasks');
 const router = express.Router();
 
 
+
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.use(cors());
 app.use('/',router);
 app.use(logger('dev'));
 app.use(express.json());
@@ -28,7 +31,7 @@ router.use((req, res, next)=> {
   if(req.headers.authorization && req.headers.authorization === 'actividad3DAW'){
     next();
   }else {
-    res.json({'error': 'No se están enviando las credenciales'})
+    res.status(401).json({'error': 'No se están enviando las credenciales'})
   }
 })
 
